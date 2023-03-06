@@ -7,14 +7,14 @@ import java.util.Set;
 
 public class ListeDAdjacence{
 
-  private Map<Station,Set<Troncon>> outputFlights;
+  private Map<Station,HashSet<Troncon>> outputFlights;
 
   public ListeDAdjacence(){
-    outputFlights=new HashMap<Station,Set<Troncon>>();
+    outputFlights=new HashMap<Station,HashSet<Troncon>>();
 
   }
 
-  public Map<Station, Set<Troncon>> getOutputFlights() {
+  public Map<Station, HashSet<Troncon>> getOutputFlights() {
     return outputFlights;
   }
 
@@ -27,7 +27,9 @@ public class ListeDAdjacence{
 
   // Complexit�: 1
   protected void ajouterArc(Troncon f) {
-    outputFlights.get(f.getStationDepart()).add(f);
+    if(outputFlights.containsKey(f.getStationDepart())){
+      outputFlights.get(f.getStationDepart()).add(f);
+    }
   }
 
   // Complexit�: 1

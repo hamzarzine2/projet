@@ -25,9 +25,9 @@ public class Graph {
     Station arriveStation=new Station(arrive);
 
     for (Station station : listeDAdjacence.getOutputFlights().keySet()) {
-      Set<Troncon> set = listeDAdjacence.getOutputFlights().get(station);
+      HashSet<Troncon> set = listeDAdjacence.getOutputFlights().get(station);
       for (Troncon troncon : set) {
-        System.out.println(troncon.getStationArrive().getNom());
+        System.out.println("DEPART"+ troncon.getStationDepart().getNom() +" ;;; " + troncon.getStationArrive().getNom() +"LIGNE +++>" + troncon.getIdLigne());
       }
     }
     int temps= BFS.search(departStation,arriveStation );
@@ -60,7 +60,6 @@ public class Graph {
       listeDAdjacence.ajouterSommet(station);
     }
     for (Troncon troncon : tronconsSet) {
-      System.out.println(troncon);
       listeDAdjacence.ajouterArc(troncon);
     }
 

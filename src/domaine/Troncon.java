@@ -22,28 +22,26 @@ public class Troncon {
     if (!(o instanceof Troncon troncon)) {
       return false;
     }
-    return idLigne == troncon.idLigne && stationDepart.equals(troncon.stationDepart)
-        && stationArrive.equals(troncon.stationArrive);
+    return idLigne == troncon.idLigne && duree == troncon.duree && getStationDepart().equals(
+        troncon.getStationDepart()) && getStationArrive().equals(troncon.getStationArrive());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(idLigne, stationDepart, stationArrive);
+    return Objects.hash(idLigne, duree, getStationDepart(), getStationArrive());
   }
 
   public Station getStationDepart() {
     return stationDepart;
   }
 
-  public void setStationDepart(Station stationDepart) {
-    this.stationDepart = stationDepart;
+  public int getIdLigne() {
+    return idLigne;
   }
 
   public Station getStationArrive() {
     return stationArrive;
   }
 
-  public void setStationArrive(Station stationArrive) {
-    this.stationArrive = stationArrive;
-  }
+
 }
