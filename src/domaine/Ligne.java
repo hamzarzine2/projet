@@ -32,4 +32,28 @@ public class Ligne {
   public int hashCode() {
     return Objects.hash(idLigne);
   }
+
+  public int getIdLigne() {
+    return idLigne;
+  }
+
+  public int getTemps() {
+    return temps;
+  }
+
+  public Station getDepart() {
+    return depart;
+  }
+
+  public Station getArrive() {
+    return arrive;
+  }
+
+  public String getTypeTransport() {
+    return typeTransport;
+  }
+
+  public String getNumeroLigne() {
+    return numeroLigne;
+  }
 }

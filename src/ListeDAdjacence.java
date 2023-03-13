@@ -2,53 +2,95 @@ import domaine.Station;
 import domaine.Troncon;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ListeDAdjacence{
+public class ListeDAdjacence {
 
-  private Map<Station,HashSet<Troncon>> outputFlights;
+  private Map<Station, HashSet<Troncon>> outputTroncon;
 
-  public ListeDAdjacence(){
-    outputFlights=new HashMap<Station,HashSet<Troncon>>();
+  public ListeDAdjacence() {
+    outputTroncon = new HashMap<Station, HashSet<Troncon>>();
 
   }
 
-  public Map<Station, HashSet<Troncon>> getOutputFlights() {
-    return outputFlights;
-  }
 
   // Complexit�: 1
   protected void ajouterSommet(Station a) {
-    if(!outputFlights.containsKey(a)){
-      outputFlights.put(a,new HashSet<>());
-    }
+
+    outputTroncon.put(a, new HashSet<>());
   }
 
   // Complexit�: 1
   protected void ajouterArc(Troncon f) {
-    if(outputFlights.containsKey(f.getStationDepart())){
-      outputFlights.get(f.getStationDepart()).add(f);
-    }
+    outputTroncon.get(f.getStationDepart()).add(f);
+
   }
 
   // Complexit�: 1
   public Set<Troncon> arcsSortants(Station a) {
     //� compl�ter
-    return outputFlights.get(a);
+    return outputTroncon.get(a);
   }
 
   // Complexit�: n
   public boolean sontAdjacents(Station a1, Station a2) {
-    Set<Troncon> a1Set = outputFlights.get(a1);
-    for (Troncon flight : a1Set) {
-      if(flight.getStationDepart()==a2)return true;
+    Set<Troncon> a1Set = outputTroncon.get(a1);
+    for (Troncon tr : a1Set) {
+      if (tr.getStationDepart().equals(a2)) {
+        return true;
+      }
     }
-    Set<Troncon> a2set = outputFlights.get(a1);
-    for (Troncon flight : a2set) {
-      if(flight.getStationArrive()==a1)return true;
+    Set<Troncon> a2set = outputTroncon.get(a1);
+    for (Troncon tr : a2set) {
+      if (tr.getStationArrive().equals(a1)) {
+        return true;
+      }
     }
     return false;
   }
 
+
+  public LinkedList<Troncon> search(Station stationDepart, Station stationArrive) {
+    LinkedList<Station> stationsFile = new LinkedList<>();
+    HashMap<Station, Troncon> tronconPrecedent = new HashMap<>();
+    HashSet<Station> stationVisite = new HashSet<>();
+    LinkedList<Troncon> route = new LinkedList<>();
+    int nbr = 0;
+
+    stationsFile.add(stationDepart);
+    stationVisite.add(stationDepart);
+    Station sometcourant = stationDepart;
+    while (!sometcourant.equals(stationArrive)) {
+      sometcourant = stationsFile.pollFirst();
+      if(outputTroncon.get(sometcourant)==null)throw new NullPointerException();
+      for (Troncon troncon : outputTroncon.get(sometcourant)) {
+        if (!stationVisite.contains(troncon.getStationArrive())) {
+          stationsFile.add(troncon.getStationArrive());
+          stationVisite.add(troncon.getStationArrive());
+          tronconPrecedent.put(troncon.getStationArrive(), troncon);
+        }
+
+
+      }
+    }
+    if (sometcourant.equals(stationArrive)) {
+      Station sommet = stationArrive;
+      while (sommet != stationDepart) {
+        if (tronconPrecedent.get(sommet) == null) {
+          break;
+        }
+
+        route.add(tronconPrecedent.get(sommet));
+        sommet = tronconPrecedent.get(sommet).getStationDepart();
+
+      }
+    }
+    return route;
+
+
+  }
 }
