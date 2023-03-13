@@ -29,13 +29,24 @@ public class Graph {
     Station departStation = stationsMap.get(depart);
     Station arriveStation = stationsMap.get(arrive);
 
-    LinkedList route = listeDAdjacence.search(departStation, arriveStation);
+    LinkedList<Troncon> route = listeDAdjacence.searchBFS(departStation, arriveStation);
+    afficherChemin(route);
+  }
+
+  public void calculerCheminMinimisantTempsTransport(String depart, String arrive) {
+    Station departStation = stationsMap.get(depart);
+    Station arriveStation = stationsMap.get(arrive);
+
+  }
+
+
+  private void afficherChemin(LinkedList<Troncon> routeInverse){
     HashSet<Integer> ligneVisite = new HashSet<>();
 
     int dureeTransport = 0;
     int dureeTotal = 0;
-    for (Iterator<Troncon> it = route.descendingIterator(); it.hasNext(); ) {
-      Troncon troncon = it.next();
+    for (Iterator it = routeInverse.descendingIterator(); it.hasNext(); ) {
+      Troncon troncon = (Troncon) it.next();
       System.out.println(troncon);
       if (!ligneVisite.contains(troncon.getIdLigne())) {
         dureeTotal += ligneHashMap.get(troncon.getIdLigne()).getTemps();
@@ -45,15 +56,10 @@ public class Graph {
 
     }
     dureeTotal+=dureeTransport;
-    System.out.println("nbrTroncons ==> " + route.size());
+    System.out.println("nbrTroncons ==> " + routeInverse.size());
     System.out.println("dureeTransport = " + dureeTransport + " duree Total = " + dureeTotal);
   }
 
-  public void calculerCheminMinimisantTempsTransport(String depart, String arrive) {
-    Station departStation = stationsMap.get(depart);
-    Station arriveStation = stationsMap.get(arrive);
-
-  }
 
   public void readFile(File file, String type) throws IOException {
     BufferedReader br = new BufferedReader(new FileReader(file));

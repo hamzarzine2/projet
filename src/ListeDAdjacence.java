@@ -2,9 +2,7 @@ import domaine.Station;
 import domaine.Troncon;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -54,43 +52,48 @@ public class ListeDAdjacence {
   }
 
 
-  public LinkedList<Troncon> search(Station stationDepart, Station stationArrive) {
+  public LinkedList<Troncon> searchBFS(Station stationDepart, Station stationArrive) {
     LinkedList<Station> stationsFile = new LinkedList<>();
     HashMap<Station, Troncon> tronconPrecedent = new HashMap<>();
     HashSet<Station> stationVisite = new HashSet<>();
-    LinkedList<Troncon> route = new LinkedList<>();
-    int nbr = 0;
+    LinkedList<Troncon> routeInverse = new LinkedList<>();
 
     stationsFile.add(stationDepart);
     stationVisite.add(stationDepart);
     Station sometcourant = stationDepart;
     while (!sometcourant.equals(stationArrive)) {
       sometcourant = stationsFile.pollFirst();
-      if(outputTroncon.get(sometcourant)==null)throw new NullPointerException();
+      if (outputTroncon.get(sometcourant) == null) {
+        throw new NullPointerException();
+      }
+
       for (Troncon troncon : outputTroncon.get(sometcourant)) {
         if (!stationVisite.contains(troncon.getStationArrive())) {
           stationsFile.add(troncon.getStationArrive());
           stationVisite.add(troncon.getStationArrive());
           tronconPrecedent.put(troncon.getStationArrive(), troncon);
         }
-
-
       }
     }
-    if (sometcourant.equals(stationArrive)) {
-      Station sommet = stationArrive;
-      while (sommet != stationDepart) {
-        if (tronconPrecedent.get(sommet) == null) {
-          break;
-        }
-
-        route.add(tronconPrecedent.get(sommet));
-        sommet = tronconPrecedent.get(sommet).getStationDepart();
-
+    Station sommet = stationArrive;
+    while (sommet != stationDepart) {
+      if (tronconPrecedent.get(sommet) == null) {
+        break;
       }
+
+      routeInverse.add(tronconPrecedent.get(sommet));
+      sommet = tronconPrecedent.get(sommet).getStationDepart();
+
     }
-    return route;
 
-
+    return routeInverse;
   }
+
+  public LinkedList searchDijksta(Station stationDepart, Station stationArrive){
+    return null;
+  }
+
+
+
+
 }
